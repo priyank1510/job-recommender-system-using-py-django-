@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load is_already_applied %}
+{% block title %}
+    Job details
+{% endblock %}
+
+{% block content %}
+
+    &lt;section class="bg-light-gray"&gt;
+        &lt;div class="container"&gt;
+            &lt;h1 class="heading"&gt;{{ job.title }}&lt;br&gt;
+                &lt;small&gt;at &lt;a href="#"&gt; {{ job.company_name }}&lt;/a&gt;&lt;/small&gt;
+            &lt;/h1&gt;
+            &lt;div class="job-detail-description"&gt;&lt;i class="fa fa-map-marker job__location"&gt; &lt;/i&gt;
+                {{ job.location }} | Posted {{ job.created_at|timesince }} |
+                {% if job.type == '1' %}
+                    &lt;span class="badge featured-badge badge-success"&gt;Full time&lt;/span&gt;
+                {% elif job.type == '2' %}
+                    &lt;span class="badge featured-badge badge-primary"&gt;Part time&lt;/span&gt;
+                {% else %}
+                    &lt;span style="color: #ffffff;" class="badge featured-badge badge-warning"&gt;Internship&lt;/span&gt;
+                {% endif %}
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="row"&gt;
+                &lt;div class="col-lg-8"&gt;
+                    &lt;h3&gt;Category: {{ job.category }}&lt;/h3&gt;
+                    &lt;h5&gt;Last date: {{ job.last_date|date }}&lt;/h5&gt;
+                    &lt;h5 class="text-info"&gt;Salary: Negotiable&lt;/h5&gt;
+                    &lt;blockquote class="blockquote"&gt;
+                        &lt;p&gt;{{ job.description }}&lt;/p&gt;
+                    &lt;/blockquote&gt;
+                    &lt;div class="job-detail__apply-bottom"&gt;
+                        {% if request.user.is_authenticated %}
+                            {% is_already_applied job request.user as is_applied %}
+                            {% if is_applied %}
+                                &lt;input type="button" class="btn btn-outline-white-primary" value="Already applied"/&gt;
+                            {% else %}
+                                &lt;form action="{% url 'jobs:apply-job' job.id %}" method="post"&gt;
+                                    {% csrf_token %}
+                                    &lt;input type="hidden" name="job" value="{{ job.id }}"&gt;
+                                    &lt;input type="submit" class="btn btn-success"
+                                           value="Apply for this job"/&gt;
+                                &lt;/form&gt;
+                            {% endif %}
+                        {% else %}
+                            &lt;form action="{% url 'jobs:apply-job' job.id %}" method="post"&gt;
+                                {% csrf_token %}
+                                &lt;input type="hidden" name="job" value="{{ job.id }}"&gt;
+                                &lt;input type="submit" class="btn btn-success"
+                                       value="Apply for this job"/&gt;
+                            &lt;/form&gt;
+                        {% endif %}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="col-lg-1"&gt;&lt;/div&gt;
+                &lt;div class="col-lg-3"&gt;
+                    &lt;h4&gt;About {{ job.company_name }}&lt;/h4&gt;
+                    &lt;p class="job-detail__company-description"&gt;{{ job.company_description }}&lt;/p&gt;
+                    &lt;p class="job-detail__social social social--outline"&gt;
+                        &lt;a href="{{ job.website }}" data-toggle="tooltip" data-placement="top" title="Website"
+                           class="link"&gt;
+                            &lt;i class="fa fa-link"&gt;&lt;/i&gt;
+                        &lt;/a&gt;
+                        &lt;a href="#" data-toggle="tooltip" data-placement="top" title="Twitter" class="twitter"&gt;
+                            &lt;i class="fa fa-twitter"&gt;&lt;/i&gt;
+                        &lt;/a&gt;
+                        &lt;a href="#" data-toggle="tooltip" data-placement="top" title="Facebook" class="facebook"&gt;
+                            &lt;i class="fa fa-facebook"&gt;&lt;/i&gt;
+                        &lt;/a&gt;
+                    &lt;/p&gt;
+                    &lt;div class="job-detail__apply-top"&gt;
+                        {% if is_applied %}
+                            &lt;input type="button" class="btn btn-outline-white-primary" value="Already applied"/&gt;
+                        {% else %}
+                            &lt;form action="{% url 'jobs:apply-job' job.id %}" method="post"&gt;
+                                {% csrf_token %}
+                                &lt;input type="hidden" name="job" value="{{ job.id }}"&gt;
+                                &lt;input type="submit" class="btn btn-success" value="Apply for this job"/&gt;
+                            &lt;/form&gt;
+                        {% endif %}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+{% endblock %}

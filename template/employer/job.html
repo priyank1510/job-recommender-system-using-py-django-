@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    All jobs
+{% endblock %}
+
+{% block content %}
+
+    &lt;section class="job-form-section job-form-section--compressed"&gt;
+        &lt;div class="container"&gt;
+            &lt;h4 class="heading"&gt;Find a &lt;span class="accent"&gt;job &lt;/span&gt; that will &lt;span class="accent"&gt;fit to your experties&lt;/span&gt;&lt;/h4&gt;
+            &lt;form id="job-main-form" method="get" action="#" class="job-main-form"&gt;
+                &lt;div class="controls"&gt;
+                    &lt;div class="row align-items-end"&gt;
+                        &lt;div class="col-sm-1 col-lg-2"&gt;&lt;/div&gt;
+                        &lt;div class="col-sm-5 col-lg-4 form-group"&gt;
+                            &lt;label for="profession"&gt;Profession&lt;/label&gt;
+                            &lt;input type="text" id="profession" name="profession"
+                                   placeholder="Profession you are looking for" class="form-control"&gt;
+                        &lt;/div&gt;
+                        &lt;div class="col-sm-5 col-lg-4 form-group"&gt;
+                            &lt;label for="location"&gt;Location&lt;/label&gt;
+                            &lt;input type="text" id="location" name="location" placeholder="Any particular location?"
+                                   value="Bay Area" class="form-control"&gt;
+                        &lt;/div&gt;
+                        &lt;div class="col-sm-1 col-lg-2 form-group"&gt;
+                            &lt;button type="submit" name="name"
+                                    class="btn btn-outline-white-primary job-main-form__button"&gt;
+                                &lt;i class="fa fa-search"&gt;&lt;/i&gt;
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section&gt;
+        &lt;div class="container"&gt;
+            &lt;h3 class="heading"&gt;We have found &lt;span class="accent"&gt;{{ jobs.count }}&lt;/span&gt; jobs&lt;/h3&gt;
+            {% for job in jobs %}
+                &lt;div class="job-listing  "&gt;
+                    &lt;div class="row"&gt;
+                        &lt;div class="col-md-12 col-lg-6"&gt;
+                            &lt;div class="row"&gt;
+                                &lt;div class="col-2"&gt;
+                                    &lt;img src="{% static 'img/company-1.png' %}"
+                                         alt="Ipsioou " class="img-fluid"&gt;
+                                &lt;/div&gt;
+                                &lt;div class="col-10"&gt;
+                                    &lt;h4 class="job__title"&gt;&lt;a
+                                            href="{% url 'jobs:jobs-detail' job.id %}"&gt;{{ job.title }}&lt;/a&gt;&lt;/h4&gt;
+                                    &lt;p class="job__company"&gt;
+                                        {{ job.company_name }}
+                                    &lt;/p&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="col-10 col-md-3 col-lg-2 ml-auto"&gt;&lt;i class="fa fa-map-marker job__location"&gt;&lt;/i&gt;
+                            {{ job.location }}
+                        &lt;/div&gt;
+                        &lt;div class="col-10 col-md-3 col-lg-3 ml-auto"&gt;
+                            &lt;p&gt;Posted {{ job.created_at|timesince }}&lt;/p&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            {% endfor %}
+            {% if is_paginated %}
+                &lt;div class="row"&gt;
+                    &lt;div class="col-md-12"&gt;
+                        &lt;nav aria-label="Page navigation example" class="d-flex justify-content-center mt-4 mb-4"&gt;
+                            &lt;ul class="pagination"&gt;
+                                {% if page_obj.has_previous %}
+                                    &lt;li class="page-item"&gt;
+                                        &lt;a href="?page={{ page_obj.previous_page_number }}"
+                                           class="page-link"&gt;&amp;laquo;&lt;/a&gt;
+                                    &lt;/li&gt;
+                                {% else %}
+                                    &lt;li class="page-item disabled"&gt;
+                                        &lt;a class="page-link"&gt;&amp;laquo;&lt;/a&gt;
+                                    &lt;/li&gt;
+                                {% endif %}
+                                {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                        &lt;li class="page-item active"&gt;
+                                            &lt;a class="page-link"&gt;{{ i }}&lt;/a&gt;
+                                        &lt;/li&gt;
+                                    {% else %}
+                                        &lt;li class="page-item"&gt;
+                                            &lt;a href="?page={{ i }}" class="page-link"&gt;{{ i }}&lt;/a&gt;
+                                        &lt;/li&gt;
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    &lt;li class="page-item"&gt;
+                                        &lt;a href="?page={{ page_obj.next_page_number }}" class="page-link"&gt;&amp;raquo;&lt;/a&gt;
+                                    &lt;/li&gt;
+                                {% else %}
+                                    &lt;li class="page-item disabled"&gt;
+                                        &lt;a class="page-link"&gt;&amp;raquo;&lt;/a&gt;
+                                    &lt;/li&gt;
+                                {% endif %}
+                            &lt;/ul&gt;
+                        &lt;/nav&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            {% endif %}
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}
+    Employer Register
+{% endblock %}
+
+{% block content %}
+
+    &lt;div class="col-lg-6 offset-3"&gt;
+        &lt;div class="box"&gt;
+            &lt;h3 class="heading"&gt;New account&lt;/h3&gt;
+            &lt;p class="lead"&gt;Not our registered yet?&lt;/p&gt;
+            &lt;p class="text-muted"&gt;If you have any questions, please feel free to &lt;a href="#"&gt;contact us&lt;/a&gt;,
+                our customer service center is working for you 24/7.&lt;/p&gt;
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        &lt;div class="alert alert-danger alert-dismissable"&gt;
+                            &lt;a href="#" class="close" data-dismiss="alert" aria-label="close"&gt;&amp;times;&lt;/a&gt;
+                            &lt;strong&gt;{{ error|escape }}&lt;/strong&gt;
+                        &lt;/div&gt;
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    &lt;div class="alert alert-danger alert-dismissable"&gt;
+                        &lt;a href="#" class="close" data-dismiss="alert" aria-label="close"&gt;&amp;times;&lt;/a&gt;
+                        &lt;strong&gt;{{ error|escape }}&lt;/strong&gt;
+                    &lt;/div&gt;
+                {% endfor %}
+            {% endif %}
+            &lt;form action="" method="post"&gt;
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.name == 'gender' %}
+
+                        &lt;div class="form-group"&gt;
+                            &lt;label for="gender"&gt;Gender&lt;/label&gt;
+                            &lt;br&gt;
+                            &lt;div class="form-check form-check-inline"&gt;
+                                &lt;input class="form-check-input" type="radio" name="gender" id="male gender"
+                                       value="male"&gt;
+                                &lt;label class="form-check-label" for="male"&gt;Male&lt;/label&gt;
+                            &lt;/div&gt;
+                            &lt;div class="form-check form-check-inline"&gt;
+                                &lt;input class="form-check-input" type="radio" name="gender" id="female"
+                                       value="female"&gt;
+                                &lt;label class="form-check-label" for="female"&gt;Female&lt;/label&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                    {% else %}
+
+                        &lt;div class="form-group"&gt;
+                            &lt;label for="id_{{ field.name }}"&gt;{{ field.label }}&lt;/label&gt;
+                            &lt;input type="{{ field.field.widget.input_type }}"
+                                   class="form-control"
+                                   name="{{ field.name }}"
+                                   id="id_{{ field.name }}"
+                                   placeholder="{{ field.field.widget.attrs.placeholder }}"&gt;
+                        &lt;/div&gt;
+
+                    {% endif %}
+                {% endfor %}
+                &lt;div class="text-center"&gt;
+                    &lt;button type="submit" class="btn btn-success"&gt;&lt;i class="fa fa-user-md"&gt;&lt;/i&gt; Register
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+{% endblock %}
